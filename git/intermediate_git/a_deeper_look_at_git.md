@@ -125,6 +125,16 @@ You can think of `git reset --soft` as a more powerful amend. Instead of changin
 
 The last part of reset we want to touch upon is `git reset --hard`. What this does is it performs all the steps of `git reset`, moving the HEAD and updating the index, but it *also* updates the working directory. This is important to note because it can be dangerous as it can potentially destroy data. A hard reset overwrites the files in the working directory to make it look exactly like the staging area of wherever HEAD ends up pointing to. Similarly to `git commit --amend`, a hard reset is a destructive command which overwrites history. This doesn't mean you should completely avoid it if working with shared repositories on a team with other developers. You should, however, **make sure you know exactly why you're using it, and that your coworkers are also aware of how and why you're using it.**
 
+#### Cleaning Up Tangled Changes
+
+When working on a branch, it’s easy to accidentally mix in unrelated changes, a situation sometimes called a *tangled working copy*. For example, imagine you’re working on a new feature, but you also spot a typo in a different part of the codebase and fix it in the same session. Now you’ve got unrelated changes — one for the feature, and one for the typo — tangled in your working copy.  Ideally, each branch should only include changes related to its intended purpose, so that commits are easily legible to others and the codebase’s development history stays clean and understandable.
+
+Thankfully, Git’s index (also called the staging area) gives you a way to carefully choose which changes should be included in your next commit: `git add --patch`. (Note: git add --patch can also be written as git add -p — they’re exactly the same.) This will display the changes you’ve made on a hunk-by-hunk basis and let you decide what to stage.
+
+For each hunk, you’ll be prompted to choose from a list of actions, the most essential of which to know are **y** (stage this hunk) and **n** (do not stage this hunk). After making your selections, you can review the changes currently staged for commit with `git diff --cached`, or, if you want to see what's still in your working directory and not yet staged, `git diff`. Remember, if you accidentally stage something you didn't mean to, you can easily un-stage it with `git restore --staged file_name`. When you are satisfied with your changes, proceed to commit them.
+
+Keeping your commits small and focused makes your project history much easier to read and understand, and it’s a habit that will pay off as your projects grow larger. For a deeper look at at tangled changes, check out this excellent article: [The Thing About Git](https://tomayko.com/blog/2008/the-thing-about-git).
+
 ### Branches are pointers
 
 While the focus of this lesson was more advanced tools for changing Git history, we're going into another advanced topic that might be hard for some to understand - Pointers. You've already learned about branches in the [Rock Paper Scissors revisited lesson](https://www.theodinproject.com/lessons/foundations-revisiting-rock-paper-scissors) and how these hold multiple *alternate reality* versions of our files. Now we're going to discuss what that actually means under the hood, and what it means for branches to be pointers.
